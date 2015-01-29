@@ -105,7 +105,7 @@ package {
 			mvp.append(model);
 			mvp.append(view);
 			mvp.append(projection);
-						
+			
 			this.shader.draw(context3D, mvp, surface, 0, -1);
 			
 			context3D.present();
