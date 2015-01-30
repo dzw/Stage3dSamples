@@ -7,14 +7,14 @@ package f3d.core.event {
 	 * @author Neil
 	 * 
 	 */	
-	public class EventComponent extends Event {
+	public class ComponentEvent extends Event {
 		
 		/** 启用组件 */
 		public static const ENABLE 	: String = "ENABLE";
 		/** disable */
 		public static const DISABLE : String = "DISABLE";
 		
-		public function EventComponent(type : String, bubbles : Boolean = false, cancelable : Boolean = false) {
+		public function ComponentEvent(type : String, bubbles : Boolean = false, cancelable : Boolean = false) {
 			super(type, bubbles, cancelable);
 		}
 		
