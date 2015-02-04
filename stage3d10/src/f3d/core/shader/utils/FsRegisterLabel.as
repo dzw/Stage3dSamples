@@ -1,4 +1,4 @@
-package f3d.core.materials.utils {
+package f3d.core.shader.utils {
 	
 	import flash.display3D.textures.Texture;
 

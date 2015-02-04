@@ -1,4 +1,4 @@
-package f3d.core.materials {
+package f3d.core.shader {
 
 	import com.adobe.utils.AGALMiniAssembler;
 	
@@ -7,15 +7,17 @@ package f3d.core.materials {
 	import flash.display3D.Program3D;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.geom.Matrix3D;
 	
+	import f3d.core.base.Object3D;
 	import f3d.core.base.Surface3D;
-	import f3d.core.materials.filters.Filter3D;
-	import f3d.core.materials.utils.FcRegisterLabel;
-	import f3d.core.materials.utils.FsRegisterLabel;
-	import f3d.core.materials.utils.ShaderRegisterCache;
-	import f3d.core.materials.utils.ShaderRegisterElement;
-	import f3d.core.materials.utils.VcRegisterLabel;
+	import f3d.core.scene.Scene3D;
+	import f3d.core.shader.filters.Filter3D;
+	import f3d.core.shader.utils.FcRegisterLabel;
+	import f3d.core.shader.utils.FsRegisterLabel;
+	import f3d.core.shader.utils.ShaderRegisterCache;
+	import f3d.core.shader.utils.ShaderRegisterElement;
+	import f3d.core.shader.utils.VcRegisterLabel;
+	import f3d.core.utils.Device3D;
 	
 	/**
 	 * shader 
@@ -27,7 +29,7 @@ package f3d.core.materials {
 		public var name : String;
 		
 		private var _filters 	: Vector.<Filter3D>;		// 所有的filter
-		private var _context 	: Context3D;				// context
+		private var _scene		: Scene3D;					// scene3d
 		private var _needBuild 	: Boolean;					// 需要build
 		private var regCache    : ShaderRegisterCache;		// 寄存器管理器
 		private var program		: Program3D;				// program
@@ -39,8 +41,12 @@ package f3d.core.materials {
 			this._needBuild = true;
 		}
 		
-		public function get context():Context3D {
-			return _context;
+		public function get scene() : Scene3D {
+			return _scene;
+		}
+		
+		public function set scene(value : Scene3D) : void {
+			this._scene = value;
 		}
 
 		/**
@@ -88,8 +94,7 @@ package f3d.core.materials {
 		 * 
 		 */		
 		public function addFilter(filter : Filter3D) : void {
-			var idx : int = this.filters.indexOf(filter);
-			if (idx == -1) {
+			if (filters.indexOf(filter) == -1) {
 				this.filters.push(filter);
 				this._needBuild = true;
 			}
@@ -117,18 +122,23 @@ package f3d.core.materials {
 		 * @param count			三角形数量
 		 * 
 		 */		
-		public function draw(context : Context3D, mvp : Matrix3D, surface : Surface3D, firstIdx : int = 0, count : int = -1) : void {
-			if (!this.context) {
-				this.upload(context);
+		public function draw(scene3d : Scene3D, object3d : Object3D, surface : Surface3D, firstIdx : int = 0, count : int = -1) : void {
+			if (!this.scene) {
+				this.upload(scene3d);
 			}
-			if (!surface.context) {
-				surface.upload(context);
+			if (!surface.scene) {
+				surface.upload(scene3d);
 			}
-			context.setProgram(program);
-			setContextDatas(context, surface);
-			context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, regCache.vcMvp.index, mvp, true);
-			context.drawTriangles(surface.indexBuffer, firstIdx, count);
-			clearContextDatas(context);
+			
+			Device3D.mvp.copyFrom(object3d.transform.world);
+			Device3D.mvp.append(scene3d.camera.viewProjection);
+			
+			scene3d.context3d.setProgram(program);
+			setContextDatas(scene3d.context3d, surface);
+			// mvp
+			scene3d.context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, regCache.vcMvp.index, Device3D.mvp, true);
+			scene3d.context3d.drawTriangles(surface.indexBuffer, firstIdx, count);
+			clearContextDatas(scene3d.context3d);
 		}
 		
 		private function clearContextDatas(context : Context3D) : void {
@@ -192,11 +202,11 @@ package f3d.core.materials {
 		 * @param context
 		 * 
 		 */		
-		public function upload(context : Context3D) : void {
-			if (!context) {
+		public function upload(scene : Scene3D) : void {
+			if (_scene == scene) {
 				return;
 			}
-			this._context = context;
+			this._scene = scene;
 			this.context3DEvent();
 		}
 		
@@ -213,7 +223,7 @@ package f3d.core.materials {
 		 * build 
 		 */		
 		public function build() : void {
-			if (!this.context || !this._needBuild) {
+			if (!scene || !this._needBuild) {
 				return;
 			}
 			if (this.regCache) {
@@ -232,14 +242,16 @@ package f3d.core.materials {
 			var fragAgal : AGALMiniAssembler = new AGALMiniAssembler();
 			fragAgal.assemble(Context3DProgramType.FRAGMENT, fragCode);
 			
-			trace('---------程序开始------------');
-			trace('---------顶点程序------------');
-			trace(vertCode);
-			trace('---------片段程序------------');
-			trace(fragCode);
-			trace('---------程序结束------------');
-			
-			this.program = context.createProgram();
+			if (Device3D.debug) {
+				trace('---------程序开始------------');
+				trace('---------顶点程序------------');
+				trace(vertCode);
+				trace('---------片段程序------------');
+				trace(fragCode);
+				trace('---------程序结束------------');
+			}
+						
+			this.program = scene.context3d.createProgram();
 			this.program.upload(vertAgal.agalcode, fragAgal.agalcode);
 			this._needBuild = false;
 		}

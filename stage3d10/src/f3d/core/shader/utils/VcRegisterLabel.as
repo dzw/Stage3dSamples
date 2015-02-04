@@ -1,4 +1,4 @@
-package f3d.core.materials.utils {
+package f3d.core.shader.utils {
 	
 	import flash.geom.Matrix3D;
 	import flash.utils.ByteArray;

@@ -5,6 +5,7 @@ package f3d.core.components {
 	import f3d.core.base.Object3D;
 	import f3d.core.event.ComponentEvent;
 	import f3d.core.interfaces.IComponent;
+	import f3d.core.scene.Scene3D;
 	
 	[Event(name="ENABLE",  type="f3d.core.event.ComponentEvent")]
 	[Event(name="DISABLE", type="f3d.core.event.ComponentEvent")]
@@ -44,7 +45,7 @@ package f3d.core.components {
 			
 		}
 		
-		public function onDraw() : void {
+		public function onDraw(scene : Scene3D) : void {
 			
 		}
 		

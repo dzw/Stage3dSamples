@@ -1,11 +1,11 @@
-package f3d.core.materials.filters {
+package f3d.core.shader.filters {
 
 	import flash.display3D.textures.Texture;
 	
 	import f3d.core.base.Surface3D;
-	import f3d.core.materials.utils.FsRegisterLabel;
-	import f3d.core.materials.utils.ShaderRegisterCache;
-	import f3d.core.materials.utils.ShaderRegisterElement;
+	import f3d.core.shader.utils.FsRegisterLabel;
+	import f3d.core.shader.utils.ShaderRegisterCache;
+	import f3d.core.shader.utils.ShaderRegisterElement;
 
 	public class TextureMapFilter extends Filter3D {
 

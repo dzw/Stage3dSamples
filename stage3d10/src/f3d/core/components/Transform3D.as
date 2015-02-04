@@ -8,11 +8,13 @@ package f3d.core.components {
 		
 		private var _local 		: Matrix3D;		// 本地transform
 		private var _world 		: Matrix3D;		// 世界transform
+		private var _invWorld	: Matrix3D;		// inv world
 		private var _worldDirty : Boolean;		
 		
 		public function Transform3D() {
 			this._local 	 = new Matrix3D();
 			this._world 	 = new Matrix3D();
+			this._invWorld   = new Matrix3D();
 			this._worldDirty = true;
 		}
 		
@@ -40,13 +42,17 @@ package f3d.core.components {
 		 * 
 		 */		
 		public function get world() : Matrix3D {
-			if (this._worldDirty) {
-				this._world.copyFrom(local);
-				if (object3D.parent) {
-					this._world.append(object3D.transform.world);
-				}
+			this._world.copyFrom(local);
+			if (object3D.parent) {
+				this._world.append(object3D.parent.transform.world);
 			}
 			return _world;
+		}
+		
+		public function get invWorld() : Matrix3D {
+			_invWorld.copyFrom(world);
+			_invWorld.invert();
+			return _invWorld
 		}
 
 	}

@@ -1,10 +1,11 @@
 package f3d.core.base {
 	
-	import flash.display3D.Context3D;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.events.Event;
+	
+	import f3d.core.scene.Scene3D;
 
 	/**
 	 * 网格数据 
@@ -33,7 +34,7 @@ package f3d.core.base {
 		// 索引数据
 		private var _indexVector : Vector.<uint>;		
 		// context
-		private var _context 	 : Context3D;				
+		private var _scene 	 	 : Scene3D;				
 		
 		public function Surface3D() {
 			this.formats = new Vector.<String>(LENGTH, true);
@@ -77,8 +78,8 @@ package f3d.core.base {
 		 * @return 
 		 * 
 		 */		
-		public function get context():Context3D {
-			return _context;
+		public function get scene():Scene3D {
+			return _scene;
 		}
 
 		/**
@@ -86,8 +87,8 @@ package f3d.core.base {
 		 * @param value
 		 * 
 		 */		
-		public function set context(value:Context3D):void {
-			_context = value;
+		public function set scene(value:Scene3D):void {
+			_scene = value;
 		}
 		
 		/**
@@ -107,7 +108,7 @@ package f3d.core.base {
 		 * 
 		 */		
 		public function download() : void {
-			this.context = null;
+			this.scene = null;
 			for (var i:int = 0; i < LENGTH; i++) {
 				if (!vertexBuffers[i]) {
 					continue;
@@ -126,11 +127,11 @@ package f3d.core.base {
 		 * @param context
 		 * 
 		 */		
-		public function upload(context : Context3D) : void {
-			if (this.context) {
+		public function upload(scene3d : Scene3D) : void {
+			if (scene == scene3d) {
 				return;
 			}
-			this.context = context;
+			this.scene = scene3d;
 			this.contextEvent();
 		}
 		
@@ -147,14 +148,14 @@ package f3d.core.base {
 		 * 
 		 */		
 		public function updateIndexBuffer() : void {
-			if (!this.context) {
+			if (!this.scene) {
 				return;
 			}
 			if (this.indexBuffer) {
 				this.indexBuffer.dispose();
 			}
 			var size : int = indexVector.length;
-			this.indexBuffer = context.createIndexBuffer(size);
+			this.indexBuffer = scene.context3d.createIndexBuffer(size);
 			this.indexBuffer.uploadFromVector(indexVector, 0, size);
 			this.numTriangles = size / 3;
 		}
@@ -163,7 +164,7 @@ package f3d.core.base {
 		 * 更新顶点buffer 
 		 */		
 		public function updateVertexBuffer() : void {
-			if (!context) {
+			if (!scene) {
 				return;
 			}
 			var num  : int = -1;
@@ -177,7 +178,7 @@ package f3d.core.base {
 				}
 				size = getSizeByFormat(formats[i]);
 				num  = sources[i].length / size;
-				this.vertexBuffers[i] = this.context.createVertexBuffer(num, size);
+				this.vertexBuffers[i] = this.scene.context3d.createVertexBuffer(num, size);
 				this.vertexBuffers[i].uploadFromVector(sources[i], 0, num);
 			}
 		}

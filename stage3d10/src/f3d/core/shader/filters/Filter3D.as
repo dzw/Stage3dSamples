@@ -1,5 +1,5 @@
-package f3d.core.materials.filters {
-	import f3d.core.materials.utils.ShaderRegisterCache;
+package f3d.core.shader.filters {
+	import f3d.core.shader.utils.ShaderRegisterCache;
 	
 	
 

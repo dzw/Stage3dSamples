@@ -1,6 +1,7 @@
 package f3d.core.interfaces {
 	
 	import f3d.core.base.Object3D;
+	import f3d.core.scene.Scene3D;
 
 	public interface IComponent {
 		
@@ -40,7 +41,7 @@ package f3d.core.interfaces {
 		/**
 		 * 绘制
 		 */
-		function onDraw() : void;
+		function onDraw(scene : Scene3D) : void;
 		
 		/**
 		 * 开/关组件 
