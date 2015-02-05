@@ -1,21 +1,20 @@
 package f3d.core.shader.filters {
 
-	import flash.display3D.textures.Texture;
-	
 	import f3d.core.base.Surface3D;
+	import f3d.core.base.Texture3D;
 	import f3d.core.shader.utils.FsRegisterLabel;
 	import f3d.core.shader.utils.ShaderRegisterCache;
 	import f3d.core.shader.utils.ShaderRegisterElement;
 
 	public class TextureMapFilter extends Filter3D {
 
-		private var texture : Texture;
+		private var texture : Texture3D;
 
-		public function TextureMapFilter(texture : Texture) {
+		public function TextureMapFilter(texture : Texture3D) {
 			super("TextureMapFilter");
 			this.texture = texture;
 		}
-
+		
 		/**
 		 * 片段程序 
 		 * @param regCache		regCache

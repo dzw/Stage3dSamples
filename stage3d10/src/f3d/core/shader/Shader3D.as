@@ -193,7 +193,7 @@ package f3d.core.shader {
 			}
 			// 设置fs
 			for each (var fsLabel : FsRegisterLabel in regCache.fsUsed) {
-				context.setTextureAt(fsLabel.fs.index, fsLabel.texture);
+				context.setTextureAt(fsLabel.fs.index, fsLabel.texture.texture);
 			}
 		}
 		
