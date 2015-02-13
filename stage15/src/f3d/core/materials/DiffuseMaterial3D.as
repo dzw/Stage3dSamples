@@ -4,7 +4,7 @@ package f3d.core.materials {
 	import f3d.core.components.Material3D;
 	import f3d.core.scene.Scene3D;
 	import f3d.core.shader.Shader3D;
-	import f3d.core.shader.filters.DirectionalLightFilter;
+	import f3d.core.shader.filters.PointLightFilter;
 	import f3d.core.shader.filters.TextureMapFilter;
 
 	public class DiffuseMaterial3D extends Material3D {
@@ -15,7 +15,8 @@ package f3d.core.materials {
 		public function DiffuseMaterial3D(texture : Texture3D) {
 			this.texture = texture;
 			this.textureMapFilter = new TextureMapFilter(texture);
-			super(new Shader3D([textureMapFilter, new DirectionalLightFilter()]));
+//			super(new Shader3D([textureMapFilter, new DirectionalLightFilter()]));
+			super(new Shader3D([textureMapFilter, new PointLightFilter()]));
 			this.shader.twoSided = true;
 		}
 		
