@@ -1,6 +1,5 @@
 package f3d.core.camera.lens {
 
-
 	import f3d.core.scene.Scene3D;
 	import f3d.core.utils.Device3D;
 

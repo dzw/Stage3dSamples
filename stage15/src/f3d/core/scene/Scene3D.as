@@ -11,30 +11,41 @@ package f3d.core.scene {
 	import f3d.core.base.Object3D;
 	import f3d.core.camera.Camera3D;
 	import f3d.core.camera.lens.PerspectiveLens;
-	import f3d.core.event.Scene3DEvent;
 	import f3d.core.utils.Device3D;
 	import f3d.core.utils.Input3D;
 	import f3d.core.utils.Time3D;
-	
-	[Event(name="UNSUPORT_PROFILE", type="f3d.core.event.Scene3DEvent")]
-	[Event(name="ENTER_FRAME", 		type="f3d.core.event.Scene3DEvent")]
-	[Event(name="EXIT_FRAME", 		type="f3d.core.event.Scene3DEvent")]
-	[Event(name="PRE_RENDER", 		type="f3d.core.event.Scene3DEvent")]
-	[Event(name="POST_RENDER", 		type="f3d.core.event.Scene3DEvent")]
-	[Event(name="RENDER", 			type="f3d.core.event.Scene3DEvent")]
-	
+		
 	public class Scene3D extends Object3D {
 		
+		/** 不支持该profile */
+		public static const UNSUPORT_PROFILE 	: String = "Scene3D:UNSUPORT_PROFILE";
+		/** 软解模式 */
+		public static const SOFTWARE 			: String = "Scene3D:SOFTWARE";
+		/** 创建完成 */
+		public static const CREATE   			: String = Event.CONTEXT3D_CREATE;
+		/** context被销毁 */
+		public static const DISPOSED 			: String = "Scene3D:DISPOSED";
 		/** enterframe事件 */
-		private static var enterFrameEvent : Scene3DEvent = new Scene3DEvent(Scene3DEvent.ENTER_FRAME);
-		/** exitframe事件 */
-		private static var exitFrameEvent  : Scene3DEvent = new Scene3DEvent(Scene3DEvent.EXIT_FRAME);
+		public static const ENTER_FRAME 		: String = "Scene3D:ENTER_FRAME";
+		/** exit frame事件 */
+		public static const EXIT_FRAME 			: String = "Scene3D:EXIT_FRAME";
 		/** pre render */
-		private static var preRenderEvent  : Scene3DEvent = new Scene3DEvent(Scene3DEvent.PRE_RENDER);
+		public static const PRE_RENDER 			: String = "Scene3D:PRE_RENDER";
 		/** post render */
-		private static var postRenderEvent : Scene3DEvent = new Scene3DEvent(Scene3DEvent.POST_RENDER);
+		public static const POST_RENDER 		: String = "Scene3D:POST_RENDER";
+		/** render */
+		public static const RENDER				: String = "Scene3D:RENDER";
+		
+		/** enterframe事件 */
+		private static var enterFrameEvent : Event = new Event(ENTER_FRAME);
+		/** exitframe事件 */
+		private static var exitFrameEvent  : Event = new Event(EXIT_FRAME);
+		/** pre render */
+		private static var preRenderEvent  : Event = new Event(PRE_RENDER);
+		/** post render */
+		private static var postRenderEvent : Event = new Event(POST_RENDER);
 		/** render event */
-		private static var renderEvent	   : Scene3DEvent = new Scene3DEvent(Scene3DEvent.RENDER);
+		private static var renderEvent	   : Event = new Event(RENDER);
 		
 		
 		/** stage3d设备索引 */
@@ -160,7 +171,7 @@ package f3d.core.scene {
 			try {
 				this.stage3d.requestContext3D(Context3DRenderMode.AUTO, Device3D.profile);
 			} catch (e : Error) {
-				this.dispatchEvent(new Scene3DEvent(Scene3DEvent.UNSUPORT_PROFILE));
+				this.dispatchEvent(new Event(UNSUPORT_PROFILE));
 				this.stage3d.requestContext3D(Context3DRenderMode.AUTO);
 			}
 		}
@@ -169,9 +180,9 @@ package f3d.core.scene {
 			this.context3d = stage3d.context3D;
 			
 			if (context3d.driverInfo.indexOf("Software") != -1) {
-				this.dispatchEvent(new Scene3DEvent(Scene3DEvent.SOFTWARE));		// 软解模式
+				this.dispatchEvent(new Event(SOFTWARE));		// 软解模式
 			} else if (context3d.driverInfo.indexOf("disposed") != -1) {
-				this.dispatchEvent(new Scene3DEvent(Scene3DEvent.DISPOSED));		// context被销毁
+				this.dispatchEvent(new Event(DISPOSED));		// context被销毁
 				this.pause(); // context被销毁，需要暂停渲染
 			}
 			if (!this.viewPort) {

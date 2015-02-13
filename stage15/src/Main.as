@@ -4,17 +4,14 @@ package {
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.geom.Vector3D;
 	
 	import f3d.core.base.Object3D;
 	import f3d.core.base.Texture3D;
 	import f3d.core.components.MeshFilter;
-	import f3d.core.event.Scene3DEvent;
 	import f3d.core.loader.OBJLoader;
 	import f3d.core.materials.DiffuseMaterial3D;
 	import f3d.core.scene.Scene3D;
-	import f3d.core.textures.BitmapTexture3D;
-	import f3d.core.utils.Matrix3DUtils;
+	import f3d.core.textures.Bitmap2DTexture;
 	
 	public class Main extends Sprite {
 		
@@ -32,16 +29,19 @@ package {
 			
 			this.scene = new Scene3D(this.stage);
 			this.scene.background = 0x333333;
-			this.scene.camera.transform.local.position = new Vector3D(0, 100, -100);
-			Matrix3DUtils.lookAt(scene.camera.transform.local, 0, 0, 0);
 			
-			this.scene.addEventListener(Scene3DEvent.CREATE, onCreate);
+			this.scene.camera.transform.x = 0;
+			this.scene.camera.transform.y = 100;
+			this.scene.camera.transform.z = -100;
+			this.scene.camera.transform.lookAt(0, 0, 0);
+			
+			this.scene.addEventListener(Scene3D.CREATE, onCreate);
 		}
 		
 		private function onCreate(event:Event) : void {
 			scene.context3d.enableErrorChecking = true;
 			// 贴图
-			var texture : Texture3D = new BitmapTexture3D(new IMG().bitmapData);
+			var texture : Texture3D = new Bitmap2DTexture(new IMG().bitmapData);
 			texture.upload(scene);
 			// 模型
 			var objLoader : OBJLoader = new OBJLoader();

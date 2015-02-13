@@ -1,20 +1,20 @@
 package f3d.core.base {
 
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
 	import f3d.core.components.Material3D;
 	import f3d.core.components.Transform3D;
-	import f3d.core.event.Scene3DEvent;
 	import f3d.core.interfaces.IComponent;
 	import f3d.core.scene.Scene3D;
-
+	
 	public class Object3D extends EventDispatcher {
 		
 		/** enter draw */
-		private static const enterDrawEvent : Scene3DEvent = new Scene3DEvent(Scene3DEvent.ENTER_FRAME);
+		private static const enterDrawEvent : Event = new Event(Scene3D.ENTER_FRAME);
 		/** exit draw */
-		private static const exitDrawEvent  : Scene3DEvent = new Scene3DEvent(Scene3DEvent.EXIT_FRAME);
+		private static const exitDrawEvent  : Event = new Event(Scene3D.EXIT_FRAME);
 		
 		/** 名称 */
 		public var name : String = "";

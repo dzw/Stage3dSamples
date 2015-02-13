@@ -1,19 +1,21 @@
 package f3d.core.components {
 
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import f3d.core.base.Object3D;
-	import f3d.core.event.ComponentEvent;
 	import f3d.core.interfaces.IComponent;
 	import f3d.core.scene.Scene3D;
 	
-	[Event(name="ENABLE",  type="f3d.core.event.ComponentEvent")]
-	[Event(name="DISABLE", type="f3d.core.event.ComponentEvent")]
-	
 	public class Component3D extends EventDispatcher implements IComponent {
 		
-		private static const ENABLE_EVENT  : ComponentEvent = new ComponentEvent(ComponentEvent.ENABLE);
-		private static const DISABLE_EVENT : ComponentEvent = new ComponentEvent(ComponentEvent.DISABLE);
+		/** 启用组件 */
+		public static const ENABLE 	: String = "Component3D:ENABLE";
+		/** disable */
+		public static const DISABLE : String = "Component3D:DISABLE";
+		
+		private static const ENABLE_EVENT  : Event = new Event(ENABLE);
+		private static const DISABLE_EVENT : Event = new Event(DISABLE);
 		
 		public var object3D : Object3D;
 		

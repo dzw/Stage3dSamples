@@ -1,17 +1,15 @@
 package f3d.core.camera.lens {
 
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Matrix3D;
 	import flash.geom.Rectangle;
-	
-	import f3d.core.event.LensEvent;
-
-	[Event(name="PROJECTION_UPDATE", type="f3d.core.event.LensEvent")]
-	
-	
+		
 	public class Lens3D extends EventDispatcher {
-	
-		protected static const projectionEvent : LensEvent = new LensEvent(LensEvent.PROJECTION_UPDATE);
+			
+		public static const PROJECTION_UPDATE : String = "Lens3D:PROJECTION_UPDATE";
+		
+		protected static const projectionEvent : Event = new Event(PROJECTION_UPDATE);
 		
 		protected var _projection 	: Matrix3D;			// 投影矩阵
 		protected var _viewPort   	: Rectangle;		// 相机视口

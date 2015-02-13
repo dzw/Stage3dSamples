@@ -10,7 +10,6 @@ package f3d.core.shader {
 	
 	import f3d.core.base.Object3D;
 	import f3d.core.base.Surface3D;
-	import f3d.core.event.Scene3DEvent;
 	import f3d.core.scene.Scene3D;
 	import f3d.core.shader.filters.Filter3D;
 	import f3d.core.shader.utils.FcRegisterLabel;
@@ -236,9 +235,8 @@ package f3d.core.shader {
 			}
 						
 			Device3D.mvp.copyFrom(object3d.transform.world);
-			Device3D.mvp.append(scene3d.camera.view);
-			Device3D.mvp.append(scene3d.camera.projection);
-			
+			Device3D.mvp.append(scene3d.camera.viewProjection);
+						
 			scene3d.context3d.setProgram(_program);
 			setContextDatas(context, surface);
 			// mvp
@@ -312,7 +310,7 @@ package f3d.core.shader {
 		
 		public function download() : void {
 			if (this._scene) {
-				this._scene.removeEventListener(Scene3DEvent.CREATE, this.context3DEvent);
+				this._scene.removeEventListener(Scene3D.CREATE, this.context3DEvent);
 				this._scene = null;
 			}
 			if (this._program) {
@@ -342,7 +340,7 @@ package f3d.core.shader {
 			if (scene.context3d) {
 				this.context3DEvent();
 			}
-			scene.addEventListener(Scene3DEvent.CREATE, context3DEvent);
+			scene.addEventListener(Scene3D.CREATE, context3DEvent);
 		}
 		
 		/**

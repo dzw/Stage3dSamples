@@ -94,7 +94,15 @@ package f3d.core.base {
 			this.scene = scene;
 			this.contextEvent();
 		}
-				
+		
+		public function download() : void {
+			
+		}
+		
+		public function dispose() : void {
+			
+		}
+		
 		protected function contextEvent(e : Event = null) : void {
 			
 		}

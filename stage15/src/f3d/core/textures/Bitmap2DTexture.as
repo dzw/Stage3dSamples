@@ -9,7 +9,7 @@ package f3d.core.textures {
 	
 	import f3d.core.base.Texture3D;
 
-	public class BitmapTexture3D extends Texture3D {
+	public class Bitmap2DTexture extends Texture3D {
 		
 		private var _bitmapData  : BitmapData;
 		private var _transparent : Boolean;
@@ -19,18 +19,18 @@ package f3d.core.textures {
 		 * @param bitmapdata
 		 * 
 		 */		
-		public function BitmapTexture3D(bitmapdata : BitmapData) {
+		public function Bitmap2DTexture(bitmapdata : BitmapData) {
 			super();
-			this.bitmapData = bitmapdata;
-			this.type 		= TYPE_2D;
-			this.filterType = FILTER_LINEAR;
-			this.wrapType   = WRAP_REPEAT;
-			this.mipType	= MIP_LINEAR;
-			this.width  	= bitmapdata.width;
-			this.height 	= bitmapdata.height;
-			this._transparent = bitmapdata.transparent;
+			this.bitmapData 	= bitmapdata;
+			this.type 			= TYPE_2D;
+			this.filterType 	= FILTER_LINEAR;
+			this.wrapType   	= WRAP_REPEAT;
+			this.mipType		= MIP_LINEAR;
+			this.width  		= bitmapdata.width;
+			this.height 		= bitmapdata.height;
+			this._transparent 	= bitmapdata.transparent;
 		}
-				
+		
 		override protected function contextEvent(e : Event = null) : void {
 			if (this.texture) {
 				this.texture.dispose();
@@ -38,9 +38,17 @@ package f3d.core.textures {
 			this.uploadWithMips();
 		}
 		
+		override public function dispose():void {
+			super.dispose();
+		}
+		
+		override public function download():void {
+			super.download();
+		}
+		
 		private function uploadWithMips() : void {
 			
-			texture = scene.context3d.createTexture(width, height, Context3DTextureFormat.BGRA, false);
+			this.texture = scene.context3d.createTexture(width, height, Context3DTextureFormat.BGRA, false);
 						
 			if (mipType == MIP_NONE) {
 				Texture(texture).uploadFromBitmapData(bitmapData);
@@ -72,6 +80,8 @@ package f3d.core.textures {
 				mipRect.height = h;
 				miplevel++;
 			}
+			levels.dispose();
+			oldMips.dispose();
 		}
 		
 		public function get bitmapData() : BitmapData {
@@ -81,6 +91,8 @@ package f3d.core.textures {
 		public function set bitmapData(value : BitmapData) : void {
 			_bitmapData = value;
 		}
-
+		
+		
+		
 	}
 }
